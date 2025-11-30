@@ -1,0 +1,65 @@
+@extends('layouts.admin')
+
+@section('title', 'Ajouter une Langue')
+
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Ajouter une Nouvelle Langue</h3>
+                    <div class="card-tools">
+                        <a href="{{ route('langues.index') }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Retour
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('langues.store') }}" method="POST">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="nom_langue" class="form-label">Nom *</label>
+                                    <input type="text" class="form-control @error('nom_langue') is-invalid @enderror" 
+                                           id="nom_langue" name="nom_langue" value="{{ old('nom_langue') }}" required 
+                                           placeholder="Ex: Français">
+                                    @error('nom_langue')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="code_langue" class="form-label">Code *</label>
+                                    <input type="text" class="form-control @error('code_langue') is-invalid @enderror" 
+                                           id="code_langue" name="code_langue" value="{{ old('code_langue') }}" required 
+                                           placeholder="Ex: fr, en, fon">
+                                    @error('code_langue')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control @error('description') is-invalid @enderror" 
+                                      id="description" name="description" rows="4" 
+                                      placeholder="Description de la langue...">{{ old('description') }}</textarea>
+                            @error('description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Créer la langue
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
