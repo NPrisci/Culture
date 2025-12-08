@@ -200,8 +200,6 @@ Route::get('/paiement/manuel', [AbonnementController::class, 'manualPayment'])
     ]);
 });
 
-// Stocker un test dans le cache
-Cache::put('health_check', 'ok', 10);
 
 // Routes de paiement
 Route::middleware(['auth'])->group(function () {
