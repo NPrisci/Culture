@@ -143,7 +143,7 @@ Route::get('/payment-success/{id}', [AbonnementController::class, 'success'])
     Route::get('/public', [VisiteurController::class, 'accueil'])->name('accue');
     
     // Pages statiques
-    Route::get('/public/a-propos', [VisiteurController::class, 'aPropos'])->name('a-propos');
+    Route::get('/public/a-propos', [VisiteurController::class, 'aPropos'])->name('apropos');
     Route::get('/public/contact', [VisiteurController::class, 'contact'])->name('contact');
     Route::post('/public/contact', [VisiteurController::class, 'soumettreContact'])->name('contact.submit');
     Route::get('/public/politique-confidentialite', [VisiteurController::class, 'politiqueConfidentialite'])->name('politique');
