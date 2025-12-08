@@ -134,12 +134,17 @@ Route::post('/subscribe', [AbonnementController::class, 'createPayment'])->name(
 // webhook (POST) - public endpoint
 Route::post('/webhook/fedapay', [AbonnementController::class, 'webhook'])->name('fedapay.webhook');
 
+Route::get('/payment-success/{id}', [AbonnementController::class, 'success'])
+    ->name('payment.success');
+
+
+
     // Accueil
     Route::get('/public', [VisiteurController::class, 'accueil'])->name('accue');
     
     // Pages statiques
     Route::get('/public/a-propos', [VisiteurController::class, 'aPropos'])->name('apropos');
-    Route::get('/public/contact', [VisiteurController::class, 'contact'])->name('contactpublic');
+    Route::get('/public/contact', [VisiteurController::class, 'contact'])->name('contact');
     Route::post('/public/contact', [VisiteurController::class, 'soumettreContact'])->name('contact.submit');
     Route::get('/public/politique-confidentialite', [VisiteurController::class, 'politiqueConfidentialite'])->name('politique');
     Route::get('/public/conditions-utilisation', [VisiteurController::class, 'conditionsUtilisation'])->name('conditions');
@@ -157,7 +162,7 @@ Route::post('/webhook/fedapay', [AbonnementController::class, 'webhook'])->name(
     
     // Contenus
     Route::get('/public/contenus', [VisiteurController::class, 'indexcontenu'])->name('contenus.index.public');
-    Route::get('/public/contenus/{contenu}', [VisiteurController::class, 'showcontenu'])->name('contenus.show.public');
+    // Route::get('/public/contenus/{contenu}', [VisiteurController::class, 'showcontenu'])->name('contenus.show.public');
     
     // Commentaires
     Route::post('/public/commentaires', [VisiteurController::class, 'storeCommentaire'])->name('commentaires.store.public');
@@ -168,18 +173,20 @@ Route::post('/webhook/fedapay', [AbonnementController::class, 'webhook'])->name(
 Route::post('/paiement', [AbonnementController::class, 'createPayment'])
     ->name('payment.create');
 
-
+// Callback FedaPay
+Route::get('/pament/callback', [AbonnementController::class, 'paymentCallback'])
+    ->name('payment.callback');
 
 // Pages de résultat
-Route::get('/paiement/success', function () {
+Route::get('/pament/success', function () {
     return view('payment.success');
 })->name('payment.success');
 
-Route::get('/paiement/failed', function () {
+Route::get('/pement/failed', function () {
     return view('payment.failed');
 })->name('payment.failed');
 
-Route::get('/paiement/manuel', [AbonnementController::class, 'manualPayment'])
+Route::get('/pament/manuel', [AbonnementController::class, 'manualPayment'])
     ->name('payment.manual');
 
     Route::get('/health', function () {
@@ -192,6 +199,7 @@ Route::get('/paiement/manuel', [AbonnementController::class, 'manualPayment'])
         ]
     ]);
 });
+
 
 
 // Routes de paiement
@@ -208,7 +216,7 @@ Route::get('/paiement/callback', [PaiementController::class, 'callback'])
     ->name('paiement.callback');
 
 // Route pour voir un contenu (avec vérification de paiement)
-Route::get('/contenus/{contenu}', [ContenuController::class, 'show'])
+Route::get('/contenus/{contenu}', [VisiteurController::class, 'showcontenu'])
     ->name('contenus.show.public')
     ->middleware(['auth', 'payment.verified']);
 require __DIR__.'/auth.php';
