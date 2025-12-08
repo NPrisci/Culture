@@ -125,10 +125,8 @@
                 aria-expanded="false"
                 style="height:40px;">
 
-            <i class="bi bi-person-circle fs-3"></i>
-        </button>
-
-        <ul class="dropdown-menu dropdown-menu-end">
+            <i class="bi bi-person-circle fs-3">
+                 <ul class="dropdown-menu dropdown-menu-end">
     @auth
     <li class="px-3 py-2">
         <div class="text-center mb-2">
@@ -174,6 +172,10 @@
     @endauth
 </ul>
 
+            </i>
+        </button>
+
+       
     </div>
 </div>
 
