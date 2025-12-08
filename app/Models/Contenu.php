@@ -57,4 +57,9 @@ class Contenu extends Model
     {
         return $this->hasMany(Commentaire::class, 'id_contenu');
     }
+
+      public function paiements()
+    {
+        return $this->hasMany(Paiement::class);
+    }
 }

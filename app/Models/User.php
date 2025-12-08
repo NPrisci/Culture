@@ -153,5 +153,31 @@ class User extends Authenticatable
     {
          return $this->hasMany(Commentaire::class, 'id_utilisateur');
      }
+
+     public function paiements()
+    {
+        return $this->hasMany(Paiement::class);
+    }
+
+    /**
+     * Vérifier si l'utilisateur a payé pour un contenu spécifique.
+     */
+    public function hasPaidForContent($contenuId)
+    {
+        return $this->paiements()
+            ->where('contenu_id', $contenuId)
+            ->where('statut', 'completed')
+            ->exists();
+    }
+
+    /**
+     * Obtenir les contenus payés par l'utilisateur.
+     */
+    public function contenusPayes()
+    {
+        return $this->belongsToMany(Contenu::class, 'paiements')
+            ->wherePivot('statut', 'completed')
+            ->withTimestamps();
+    }
 }
 

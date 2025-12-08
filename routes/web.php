@@ -18,6 +18,7 @@ use App\Http\Controllers\ParlerController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\VisiteurController;
 use App\Http\Controllers\AbonnementController;
+use App\Http\Controllers\PaiementController;
 
 Route::get('/check', function () {
     return view('checkout');
@@ -201,4 +202,22 @@ Route::get('/paiement/manuel', [AbonnementController::class, 'manualPayment'])
 
 // Stocker un test dans le cache
 Cache::put('health_check', 'ok', 10);
+
+// Routes de paiement
+Route::middleware(['auth'])->group(function () {
+    Route::get('/contenus/{contenu}/paiement', [PaiementController::class, 'showPaiementForm'])
+        ->name('contenus.paiement.form');
+    
+    Route::post('/contenus/{contenu}/paiement', [PaiementController::class, 'processPaiement'])
+        ->name('contenus.paiement.process');
+});
+
+// Route de callback (accessible sans auth)
+Route::get('/paiement/callback', [PaiementController::class, 'callback'])
+    ->name('paiement.callback');
+
+// Route pour voir un contenu (avec vérification de paiement)
+Route::get('/contenus/{contenu}', [ContenuController::class, 'show'])
+    ->name('contenus.show.public')
+    ->middleware(['auth', 'payment.verified']);
 require __DIR__.'/auth.php';

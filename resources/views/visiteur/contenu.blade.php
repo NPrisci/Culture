@@ -101,19 +101,62 @@
         @if($contenuVedette)
         <div class="card mt-3">
             <div class="card-header bg-warning text-white">
-                <h5 class="mb-0"><i class="bi bi-star"></i> Contenu vedette</h5>
+                <h5 class="mb-0"><i class="bi bi-star"></i> Contenu vedette ok</h5>
             </div>
             <div class="card-body">
                 <h6>{{ Str::limit($contenuVedette->titre, 50) }}</h6>
                 <p class="text-muted mb-2">{{ Str::limit(strip_tags($contenuVedette->texte), 80) }}</p>
-                <div class="d-flex justify-content-between align-items-center">
+                {{-- <div class="d-flex justify-content-between align-items-center">
                     <small class="text-muted">
                         <i class="bi bi-chat-left-text"></i> {{ $contenuVedette->commentaires->count() }}
                     </small>
                     <a href="{{ route('contenus.show.public', $contenuVedette) }}" class="btn btn-sm btn-outline-warning">
                         Lire
                     </a>
-                </div>
+                </div> --}}
+                <div class="d-flex justify-content-between align-items-center">
+    <small class="text-muted d-block">
+        @if(isset($contenu) && $contenu)
+            <i class="bi bi-calendar"></i> {{ \Carbon\Carbon::parse($contenu->date_creation)->format('d/m/Y') }}
+        @else
+            <i class="bi bi-calendar"></i> Date non disponible
+        @endif
+    </small>
+    
+    @if(auth()->check())
+        @php
+            // Vérifier si la variable $contenu existe
+            if (isset($contenu) && $contenu) {
+                $hasPaid = App\Models\Paiement::where('contenu_id', $contenu->id)
+                    ->where('user_id', auth()->id())
+                    ->where('statut', 'completed')
+                    ->exists();
+            } else {
+                $hasPaid = false;
+            }
+        @endphp
+        
+        @if($hasPaid)
+            <a href="{{ route('contenus.show.public', $contenu) }}" class="btn btn-primary btn-sm">
+                <i class="bi bi-book"></i> Lire plus
+            </a>
+        @else
+            @if(isset($contenu) && $contenu)
+                <a href="{{ route('contenus.paiement.form', $contenu) }}" class="btn btn-success btn-sm">
+                    <i class="bi bi-credit-card"></i> 100 FCFA
+                </a>
+            @else
+                <button type="button" class="btn btn-secondary btn-sm" disabled>
+                    <i class="bi bi-credit-card"></i> Indisponible
+                </button>
+            @endif
+        @endif
+    @else
+        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <i class="bi bi-lock"></i> 100 FCFA
+        </button>
+    @endif
+</div>
             </div>
         </div>
         @endif
@@ -163,12 +206,48 @@
                             </div>
                             
                             <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted">
-                                    <i class="bi bi-calendar"></i> {{ $contenu->date_creation->format('d/m/Y') }}
-                                </small>
-                                <a href="{{ route('contenus.show.public', $contenu) }}" class="btn btn-primary btn-sm">
+                                <small class="text-muted d-block">
+    <i class="bi bi-calendar"></i> {{ \Carbon\Carbon::parse($contenu->date_creation)->format('d/m/Y') }}
+</small>
+                                {{-- <a href="{{ route('contenus.show.public', $contenu) }}" class="btn btn-primary btn-sm">
                                     Lire
-                                </a>
+                                </a> --}}
+                                @if(auth()->check())
+        @php
+            // Vérifier si la variable $contenu existe
+            if (isset($contenu) && $contenu) {
+                $hasPaid = App\Models\Paiement::where('contenu_id', $contenu->id)
+                    ->where('user_id', auth()->id())
+                    ->where('statut', 'completed')
+                    ->exists();
+            } else {
+                $hasPaid = false;
+            }
+        @endphp
+        
+        @if($hasPaid)
+            <a href="{{ route('contenus.show.public', $contenu) }}" class="btn btn-primary btn-sm">
+                <i class="bi bi-book"></i> Lire plus
+            </a>
+        @else
+            @if(isset($contenu) && $contenu)
+                <a href="{{ route('contenus.paiement.form', $contenu) }}" class="btn btn-success btn-sm">
+                    <i class="bi bi-credit-card"></i> 100 FCFA
+                </a>
+            @else
+                <button type="button" class="btn btn-secondary btn-sm" disabled>
+                    <i class="bi bi-credit-card"></i> Indisponible
+                </button>
+            @endif
+        @endif
+    @else
+        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <i class="bi bi-lock"></i> 100 FCFA
+        </button>
+    @endif
+</div>
+            
+    
                             </div>
                         </div>
                         <div class="card-footer bg-transparent">
@@ -223,7 +302,7 @@
                         </div>
                         <div class="col-md-3 text-end">
                             <small class="text-muted d-block">
-                                <i class="bi bi-calendar"></i> {{ $contenu->date_creation->format('d/m/Y') }}
+                                <i class="bi bi-calendar"></i> {{ \Carbon\Carbon::parse($contenu->date_creation)->format('d/m/Y') }}
                             </small>
                             <small class="text-muted">
                                 <i class="bi bi-chat-left-text"></i> {{ $contenu->commentaires->count() }} commentaires
@@ -278,6 +357,31 @@
                         </div>
                     </div>
                     @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de connexion -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Connexion requise</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Vous devez vous connecter pour accéder à ce contenu.</p>
+                <p>Prix d'accès : <strong>100 FCFA</strong></p>
+                
+                <div class="d-grid gap-2 mt-4">
+                    <a href="{{ route('login') }}" class="btn btn-primary">
+                        <i class="bi bi-box-arrow-in-right"></i> Se connecter
+                    </a>
+                    <a href="{{ route('register') }}" class="btn btn-outline-primary">
+                        <i class="bi bi-person-plus"></i> Créer un compte
+                    </a>
                 </div>
             </div>
         </div>
