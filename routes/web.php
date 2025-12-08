@@ -174,19 +174,19 @@ Route::post('/paiement', [AbonnementController::class, 'createPayment'])
     ->name('payment.create');
 
 // Callback FedaPay
-Route::get('/pament/callback', [AbonnementController::class, 'paymentCallback'])
+Route::get('/payment/callback', [AbonnementController::class, 'paymentCallback'])
     ->name('payment.callback');
 
 // Pages de résultat
-Route::get('/pament/success', function () {
+Route::get('/payment/success', function () {
     return view('payment.success');
 })->name('payment.success');
 
-Route::get('/pement/failed', function () {
+Route::get('/payment/failed', function () {
     return view('payment.failed');
 })->name('payment.failed');
 
-Route::get('/pament/manuel', [AbonnementController::class, 'manualPayment'])
+Route::get('/payment/manuel', [AbonnementController::class, 'manualPayment'])
     ->name('payment.manual');
 
     Route::get('/health', function () {
