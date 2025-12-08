@@ -178,9 +178,6 @@ Route::get('/payment/callback', [AbonnementController::class, 'paymentCallback']
     ->name('payment.callback');
 
 // Pages de résultat
-Route::get('/payment/success', function () {
-    return view('payment.success');
-})->name('payment.success');
 
 Route::get('/payment/failed', function () {
     return view('payment.failed');
