@@ -129,26 +129,51 @@
         </button>
 
         <ul class="dropdown-menu dropdown-menu-end">
-
-            @auth
-            <li class="px-3 py-2">
-                <div class="d-flex gap-2">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="btn btn-warning">Déconnexion</button>
-                    </form>
-
-                    <a href="{{ route('profile.edit') }}" class="btn btn-danger">Edit</a>
+    @auth
+    <li class="px-3 py-2">
+        <div class="text-center mb-2">
+            <div class="dropdown-item disabled">
+                <i class="fas fa-user-circle fa-2x text-primary"></i>
+                <div class="mt-2">
+                    <strong>{{ Auth::user()->nom }}</strong>
+                    <div class="small text-muted">{{ Auth::user()->email }}</div>
                 </div>
-            </li>
-            @else
-            <li class="px-3 py-2 d-flex gap-2">
-                <a href="{{ route('login') }}" class="btn btn-outline-success">Connexion</a>
-                <a href="{{ route('register') }}" class="btn btn-benin">S’inscrire</a>
-            </li>
-            @endauth
+            </div>
+        </div>
+        <hr class="dropdown-divider">
+        <div class="d-flex flex-column gap-2">
+            <a href="{{ route('dashboard') }}" class="btn btn-outline-primary">
+                <i class="fas fa-tachometer-alt me-2"></i> Tableau de bord
+            </a>
+            <a href="{{ route('profile.edit') }}" class="btn btn-outline-info">
+                <i class="fas fa-user-edit me-2"></i> Modifier le profil
+            </a>
+            <form method="POST" action="{{ route('logout') }}" class="d-grid">
+                @csrf
+                <button type="submit" class="btn btn-outline-danger">
+                    <i class="fas fa-sign-out-alt me-2"></i> Déconnexion
+                </button>
+            </form>
+        </div>
+    </li>
+    @else
+    <li class="px-3 py-3">
+        <div class="text-center mb-3">
+            <i class="fas fa-user-circle fa-3x text-secondary mb-2"></i>
+            <p class="text-muted">Connectez-vous pour accéder à votre compte</p>
+        </div>
+        <div class="d-flex flex-column gap-2">
+            <a href="{{ route('login') }}" class="btn btn-success">
+                <i class="fas fa-sign-in-alt me-2"></i> Connexion
+            </a>
+            <a href="{{ route('register') }}" class="btn btn-benin">
+                <i class="fas fa-user-plus me-2"></i> S'inscrire
+            </a>
+        </div>
+    </li>
+    @endauth
+</ul>
 
-        </ul>
     </div>
 </div>
 
