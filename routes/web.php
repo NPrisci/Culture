@@ -134,11 +134,6 @@ Route::post('/subscribe', [AbonnementController::class, 'createPayment'])->name(
 // webhook (POST) - public endpoint
 Route::post('/webhook/fedapay', [AbonnementController::class, 'webhook'])->name('fedapay.webhook');
 
-Route::get('/payment-success/{id}', [AbonnementController::class, 'success'])
-    ->name('payment.success');
-
-
-
     // Accueil
     Route::get('/public', [VisiteurController::class, 'accueil'])->name('accue');
     
@@ -173,9 +168,7 @@ Route::get('/payment-success/{id}', [AbonnementController::class, 'success'])
 Route::post('/paiement', [AbonnementController::class, 'createPayment'])
     ->name('payment.create');
 
-// Callback FedaPay
-Route::get('/paiement/callback', [AbonnementController::class, 'paymentCallback'])
-    ->name('payment.callback');
+
 
 // Pages de résultat
 Route::get('/paiement/success', function () {
