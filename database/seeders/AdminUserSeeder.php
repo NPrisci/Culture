@@ -11,36 +11,47 @@ class AdminUserSeeder extends Seeder
 {
     public function run()
     {
-        // User::create([
-        //     'nom' => 'Administrateur',
-        //     'prenom' =>'Admin',
-        //     'email' => 'admin@beninculture.com',
-        //     'password' => Hash::make('password123'),
-        //     'email_verified_at' => now(),
-        //     'date_inscription' => now(), 
-        //     'statut' => 'actif',
-        //     'id_role' => 1, 
-        //     'id_langue' => 2,
-        // ]);
+         User::create([
+             'nom' => 'Administrateur',
+             'prenom' =>'Admin',
+             'email' => 'admin@beninculture.com',
+             'password' => Hash::make('password123'),
+             'email_verified_at' => now(),
+             'date_inscription' => now(), 
+             'statut' => 'actif',
+             'id_role' => 1, 
+             'id_langue' => 2,
+         ]);
 
         // plusieurs utilisateurs de test
         $users = [
-            // [
-            //     'nom' => 'Doe',
-            //     'prenom' =>'John',
-            //     'email' => 'john@beninculture.com',
-            //     'password' => Hash::make('password123'),
-            //     'email_verified_at' => now(),
-            //     'date_inscription' => now(), 
-            //     'statut' => 'actif',
-            //     'id_role' => 2, 
-            //     'id_langue' => 3,
-            // ],
+             [
+                 'nom' => 'Doe',
+                 'prenom' =>'John',
+                 'email' => 'john@beninculture.com',
+                 'password' => Hash::make('password123'),
+                 'email_verified_at' => now(),
+                 'date_inscription' => now(), 
+                 'statut' => 'actif',
+                 'id_role' => 2, 
+                 'id_langue' => 3,
+             ],
+            [
+                 'nom' => 'LISE',
+                 'prenom' =>'Lisa',
+                 'email' => 'lisa@beninculture.com',
+                 'password' => Hash::make('password123'),
+                 'email_verified_at' => now(),
+                 'date_inscription' => now(), 
+                 'statut' => 'actif',
+                 'id_role' => 3, 
+                 'id_langue' => 3,
+             ],
             [
                 'nom' => 'COMLAN',
                 'prenom' =>'Maurice',
                 'email' => 'mauricecomlan@gmail.com',
-                'password' => Hash::make('password123'),
+                'password' => Hash::make('Eneam123'),
                 'email_verified_at' => now(),
                 'date_inscription' => now(), 
                 'statut' => 'actif',
