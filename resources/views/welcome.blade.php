@@ -686,7 +686,7 @@
     </section><!-- /Certifications Section -->
 
     <!-- Team Section -->
-    <section id="team" class="team section">
+    {{-- <section id="team" class="team section">
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
@@ -701,7 +701,7 @@
           <div class="col-lg-4 col-md-6">
             <div class="team-member" data-aos="fade-up" data-aos-delay="200">
               <div class="member-img">
-                <img src="assets/img/culture/gardien-tradition.webp" class="img-fluid" alt="">
+                <img src="assets/img/construction/koffi.jpg" class="img-fluid" alt="">
               </div>
               <div class="member-info">
                 <h4>Koffi Gnonlonfoun</h4>
@@ -719,7 +719,7 @@
           <div class="col-lg-4 col-md-6">
             <div class="team-member" data-aos="fade-up" data-aos-delay="300">
               <div class="member-img">
-                <img src="assets/img/culture/artisane.webp" class="img-fluid" alt="">
+                <img src="assets/img/construction/mariam.jpg" class="img-fluid" alt="">
               </div>
               <div class="member-info">
                 <h4>Adjoa Sènami</h4>
@@ -737,7 +737,7 @@
           <div class="col-lg-4 col-md-6">
             <div class="team-member" data-aos="fade-up" data-aos-delay="400">
               <div class="member-img">
-                <img src="assets/img/culture/historien.webp" class="img-fluid" alt="">
+                <img src="assets/img/construction/sedo.webp" class="img-fluid" alt="">
               </div>
               <div class="member-info">
                 <h4>Dr. Patrice Hountondji</h4>
@@ -755,7 +755,7 @@
           <div class="col-lg-4 col-md-6">
             <div class="team-member" data-aos="fade-up" data-aos-delay="200">
               <div class="member-img">
-                <img src="assets/img/culture/musicien.webp" class="img-fluid" alt="">
+                <img src="assets/img/construction/sagbohan.jpg" class="img-fluid" alt="">
               </div>
               <div class="member-info">
                 <h4>Sèdo Gbedjinon</h4>
@@ -773,7 +773,7 @@
           <div class="col-lg-4 col-md-6">
             <div class="team-member" data-aos="fade-up" data-aos-delay="300">
               <div class="member-img">
-                <img src="assets/img/culture/guide.webp" class="img-fluid" alt="">
+                <img src="assets/img/construction/senami.webp" class="img-fluid" alt="">
               </div>
               <div class="member-info">
                 <h4>Rachida Orou</h4>
@@ -791,7 +791,7 @@
           <div class="col-lg-4 col-md-6">
             <div class="team-member" data-aos="fade-up" data-aos-delay="400">
               <div class="member-img">
-                <img src="assets/img/culture/chef-cuisine.webp" class="img-fluid" alt="">
+                <img src="assets/img/construction/mariam.jpg" class="img-fluid" alt="">
               </div>
               <div class="member-info">
                 <h4>Mariam Traoré</h4>
@@ -810,8 +810,68 @@
 
       </div>
 
-    </section><!-- /Team Section -->
+    </section>
+    
+    <!-- /Team Section --> --}}
+     <section id="team" class="team section">
 
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Communauté & Experts</h2>
+        <p>Rencontrez les gardiens de la tradition et les passionnés de la culture béninoise</p>
+    </div><!-- End Section Title -->
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-5">
+            @foreach($membresEquipe as $index => $membre)
+            <div class="col-lg-4 col-md-6">
+                <div class="team-member" data-aos="fade-up" data-aos-delay="{{ 200 + ($index * 100) }}">
+                    <div class="member-img">
+                        @if($membre->photo)
+                            <img src="{{ asset('storage/' . $membre->photo) }}" class="img-fluid" alt="{{ $membre->prenom . ' ' . $membre->nom }}">
+                        @else
+                            <img src="{{ asset('assets/img/construction/mariam.jpg') }}" class="img-fluid" alt="Photo par défaut">
+                        @endif
+                    </div>
+                    <div class="member-info">
+                        <h4>{{ $membre->prenom . ' ' . $membre->nom }}</h4>
+                        <span>{{ $membre->statut ?? 'Membre de la communauté' }}</span>
+                        <p>
+                            @php
+                                // Vous pouvez ajouter une logique pour afficher des descriptions différentes selon le rôle
+                                $description = "Contributeur actif à la préservation de la culture béninoise.";
+                                if($membre->id_role == 1) {
+                                    $description = "Expert et gardien des traditions ancestrales du Bénin.";
+                                } elseif($membre->id_role == 2) {
+                                    $description = "Passionné engagé dans la transmission du patrimoine culturel.";
+                                }
+                            @endphp
+                            {{ $description }}
+                        </p>
+                        <div class="social">
+                            @if($membre->twitter)
+                                <a href="{{ $membre->twitter }}" target="_blank"><i class="bi bi-twitter-x"></i></a>
+                            @endif
+                            @if($membre->linkedin)
+                                <a href="{{ $membre->linkedin }}" target="_blank"><i class="bi bi-linkedin"></i></a>
+                            @endif
+                            @if($membre->email)
+                                <a href="mailto:{{ $membre->email }}"><i class="bi bi-envelope"></i></a>
+                            @endif
+                            @if($membre->instagram)
+                                <a href="{{ $membre->instagram }}" target="_blank"><i class="bi bi-instagram"></i></a>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End Team Member -->
+            @endforeach
+        </div>
+
+    </div>
+
+</section>
     <!-- Call To Action Section -->
     <section id="call-to-action" class="call-to-action section light-background">
 
@@ -921,6 +981,38 @@
       </div>
 
     </section><!-- /Call To Action Section -->
+  <section class="subscribe-section py-5" style="background: #f1f8ff;">
+    <div class="container" data-aos="fade-up">
+
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+
+                <h2 class="mb-3">Abonnez-vous pour soutenir la culture béninoise</h2>
+                <p class="mb-4">
+                    Recevez des contenus exclusifs, des découvertes culturelles et des mises à jour régulières directement dans votre boîte mail.
+                </p>
+
+                <form action="{{ route('subscribe.pay') }}" method="GET" class="d-flex flex-column flex-md-row justify-content-center gap-2">
+                    
+                    <input 
+                        type="email" 
+                        name="email" 
+                        class="form-control form-control-lg" 
+                        placeholder="Entrez votre adresse email" 
+                        required
+                    >
+
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        Je m’abonne
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</section>
 
 
 @endsection

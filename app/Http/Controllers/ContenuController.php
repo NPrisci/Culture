@@ -13,9 +13,19 @@ class ContenuController extends Controller
 {
    
 
+    // public function index()
+    // {
+    //     $contenus = Contenu::with(['region', 'langue', 'typeContenu'])->get();
+    //     return view('contenus.index', compact('contenus'));
+    // }
+
     public function index()
     {
-        $contenus = Contenu::with(['region', 'langue', 'typeContenu'])->get();
+        // Utilisez paginate() au lieu de get()
+        $contenus = Contenu::with(['region', 'langue', 'typeContenu'])
+            ->orderBy('date_creation', 'desc')
+            ->paginate(10); // ✅ ICI EST LA CORRECTION
+        
         return view('contenus.index', compact('contenus'));
     }
 
@@ -37,7 +47,12 @@ class ContenuController extends Controller
             'id_region' => 'required|exists:regions,id_region',
             'id_langue' => 'required|exists:langues,id_langue',
             'id_type_contenu' => 'required|exists:type_contenus,id_type_contenu',
-            'statut' => 'required|string|in:brouillon,publié,archivé'
+            'statut' => 'required|string|in:brouillon,publié,archivé',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'alt_image' => 'nullable|string|max:255',
+            'lien_video' => 'nullable|url|max:500',
+            'video_file' => 'nullable|file|mimes:mp4,avi,mov,mkv|max:51200',
+            'titre_video' => 'nullable|string|max:255',
         ]);
 
         $data = $request->all();
@@ -77,7 +92,12 @@ class ContenuController extends Controller
             'id_region' => 'required|exists:regions,id_region',
             'id_langue' => 'required|exists:langues,id_langue',
             'id_type_contenu' => 'required|exists:type_contenus,id_type_contenu',
-            'statut' => 'required|string|in:brouillon,publié,archivé'
+            'statut' => 'required|string|in:brouillon,publié,archivé',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'alt_image' => 'nullable|string|max:255',
+            'lien_video' => 'nullable|url|max:500',
+            'video_file' => 'nullable|file|mimes:mp4,avi,mov,mkv|max:51200',
+            'titre_video' => 'nullable|string|max:255',
         ]);
 
         $contenu->update($request->all());

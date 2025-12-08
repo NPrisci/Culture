@@ -1,14 +1,27 @@
-@extends('layouts.app')
+@extends('layouts.ap')
 
 @section('title', 'Acteurs de la Culture | Culture Bénin')
 
 @section('content')
 
+<!-- Page Title -->
+<div class="page-title dark-background" data-aos="fade" style="background-image: url({{ asset('assets/img/construction/drapeau.jpg') }});">
+  <div class="container position-relative">
+    
+        <h2>Figures culturelles</h2>
+        <p>Les personnes qui préservent et transmettent le patrimoine béninois</p>
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a href="{{ url('/') }}">Home</a></li>
+        <li class="current">Communauté</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
 <section id="team" class="team section">
 
     <div class="container section-title" data-aos="fade-up">
-        <h2>Figures culturelles</h2>
-        <p>Les personnes qui préservent et transmettent le patrimoine béninois</p>
     </div>
 
     <div class="container">

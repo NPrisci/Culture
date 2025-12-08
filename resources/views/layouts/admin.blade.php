@@ -90,58 +90,69 @@
                 <i class="bi bi-list"></i>
               </a>
             </li> --}}
-            <li class="nav-item d-none d-md-block"><a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a></li>
+            <li class="nav-item d-none d-md-block">
+               
+            </li>
             <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Contact</a></li>
           </ul>
-          <div class="d-flex gap-2">
+          {{-- <div class="d-flex gap-2">
             @auth
                 <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                     @csrf
                     <button type="submit" class="register-btn">Déconnexion</button>
                 </form>
-                {{-- <a href="/dashboard" class="btn btn-benin">Dashboard</a> --}}
             @else
                 <a href="/login" class="btn btn-outline-success">Connexion</a>
                 <a href="/register" class="btn btn-benin">S’inscrire</a>
             @endauth
-        </div>
+        </div> --}}
 
-        <div class="user-profile-menu ms-3">
-                <div class="dropdown">
-                    <button class="user-menu-btn btn btn-link p-0 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="user-avatar-sm">
-                            <i class="bi bi-person-circle"></i>
-                        </div>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end" id="userDropdownMenu">
-                        <!-- Le contenu du menu sera généré dynamiquement par JavaScript -->
-                        <div class="d-flex gap-2">
-              @auth
-    <div class="d-flex gap-2">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="btn btn-warning">Déconnexion</button>
-        </form>
-
-        <a href="{{ route('profile.edit') }}" class="btn btn-danger">Edit</a>
-    </div>
-@else
-    <a href="{{ route('login') }}" class="btn btn-outline-success me-2">Connexion</a>
-    <a href="{{ route('register') }}" class="btn btn-benin">S’inscrire</a>
-@endauth
-
-        </div>
-                    </ul>
-                </div>
+       
           <!--end::Start Navbar Links-->
           <!--begin::End Navbar Links-->
           <ul class="navbar-nav ms-auto">
             <!--begin::Navbar Search-->
             <li class="nav-item">
-              <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+              {{-- <a class="nav-link" data-widget="navbar-search" href="#" role="button">
                 <i class="bi bi-search"></i>
-              </a>
+              </a> --}}
+              <div class="user-profile-menu ms-3">
+    <div class="dropdown">
+
+        <button class="btn btn-link p-0 border-0 d-flex align-items-center" 
+                type="button" 
+                data-bs-toggle="dropdown" 
+                aria-expanded="false"
+                style="height:40px;">
+
+            <i class="bi bi-person-circle fs-3"></i>
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end">
+
+            @auth
+            <li class="px-3 py-2">
+                <div class="d-flex gap-2">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-warning">Déconnexion</button>
+                    </form>
+
+                    <a href="{{ route('profile.edit') }}" class="btn btn-danger">Edit</a>
+                </div>
             </li>
+            @else
+            <li class="px-3 py-2 d-flex gap-2">
+                <a href="{{ route('login') }}" class="btn btn-outline-success">Connexion</a>
+                <a href="{{ route('register') }}" class="btn btn-benin">S’inscrire</a>
+            </li>
+            @endauth
+
+        </ul>
+    </div>
+</div>
+
+               </li>
             <!--end::Navbar Search-->
             <!--begin::Messages Dropdown Menu-->
             <li class="nav-item dropdown">
@@ -261,23 +272,27 @@
             </li>
             <!--end::Notifications Dropdown Menu-->
             <!--begin::Fullscreen Toggle-->
-            <li class="nav-item">
+            {{-- <li class="nav-item">
               <a class="nav-link" href="#" data-lte-toggle="fullscreen">
                 <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
                 <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none"></i>
               </a>
-            </li>
+            </li> --}}
             <!--end::Fullscreen Toggle-->
             <!--begin::User Menu Dropdown-->
             <li class="nav-item dropdown user-menu">
-              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+              @auth
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                 <img
                   src="{{ URL::asset('admin/assets/img/user2-160x160.jpg') }}"
+                  {{-- {{ old('photo', Auth::user()->photo) }} --}}
                   class="user-image rounded-circle shadow"
                   alt="User Image"
                 />
-                <span class="d-none d-md-inline">Alexander Pierce</span>
+                <span class="d-none d-md-inline">{{ old('nom', Auth::user()->nom) }} {{ old('prenom', Auth::user()->prenom) }}</span>
               </a>
+              @endauth
+              
               <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                 <!--begin::User Image-->
                 <li class="user-header text-bg-primary">
@@ -287,27 +302,27 @@
                     alt="User Image"
                   />
                   <p>
-                    Alexander Pierce - Web Developer
-                    <small>Member since Nov. 2023</small>
+                    {{ old('nom', Auth::user()->nom) }} {{ old('prenom', Auth::user()->prenom) }} 
+                    <small>Member since {{ old('nom', Auth::user()->date_inscription) }}</small>
                   </p>
                 </li>
                 <!--end::User Image-->
                 <!--begin::Menu Body-->
                 <li class="user-body">
                   <!--begin::Row-->
-                  <div class="row">
+                  {{-- <div class="row">
                     <div class="col-4 text-center"><a href="#">Followers</a></div>
                     <div class="col-4 text-center"><a href="#">Sales</a></div>
                     <div class="col-4 text-center"><a href="#">Friends</a></div>
-                  </div>
+                  </div> --}}
                   <!--end::Row-->
                 </li>
                 <!--end::Menu Body-->
                 <!--begin::Menu Footer-->
-                <li class="user-footer">
+                {{-- <li class="user-footer">
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                   <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
-                </li>
+                </li> --}}
                 <!--end::Menu Footer-->
               </ul>
             </li>

@@ -1,14 +1,26 @@
-@extends('layouts.app')
+@extends('layouts.ap')
 
 @section('title', 'Services culturels | Culture Bénin')
 
 @section('content')
+<!-- Page Title -->
+<div class="page-title dark-background" data-aos="fade" style="background-image: url({{ asset('assets/img/construction/drapeau.jpg') }});">
+  <div class="container position-relative">
+    
+        <h2>Richesses Culturelles</h2>
+        <p>Explorez les grandes dimensions culturelles du Bénin</p>
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a href="{{ url('/') }}">Home</a></li>
+        <li class="current">Galerie</li>
+      </ol>
+    </nav>
+  </div>
+</div>
 
 <section id="services" class="services section light-background">
 
     <div class="container section-title" data-aos="fade-up">
-        <h2>Richesses Culturelles</h2>
-        <p>Explorez les grandes dimensions culturelles du Bénin</p>
     </div>
 
     <div class="container">

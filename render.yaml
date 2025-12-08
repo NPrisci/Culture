@@ -1,0 +1,81 @@
+services:
+  - type: web
+    name: culture-laravel-docker
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    region: frankfurt  # ou virginia, singapore
+    plan: free
+    branch: main
+    numInstances: 1
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        fromService:
+          type: web
+          name: culture-laravel-docker
+          property: url
+      - key: DB_HOST
+        fromService:
+          type: pgsql  # ou mysql si service externe
+          name: culture-database
+          property: host
+      - key: DB_PORT
+        fromService:
+          type: pgsql
+          name: culture-database
+          property: port
+      - key: DB_DATABASE
+        fromService:
+          type: pgsql
+          name: culture-database
+          property: database
+      - key: DB_USERNAME
+        fromService:
+          type: pgsql
+          name: culture-database
+          property: user
+      - key: DB_PASSWORD
+        fromService:
+          type: pgsql
+          name: culture-database
+          property: password
+    healthCheckPath: /health
+    autoDeploy: true
+    disk:
+      name: storage
+      mountPath: /var/www/storage
+      sizeGB: 1
+
+  - type: pgsql  # Render n'a pas MySQL natif
+    name: culture-database
+    plan: free
+    region: frankfurt
+    databaseName: culture_db
+    user: culture_user
+    ipAllowList: []  # Autoriser toutes les IP
+
+  - type: cron
+    name: culture-scheduler
+    schedule: "*/10 * * * *"  # Toutes les 10 minutes
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: IS_CRON
+        value: "true"
+    command: >
+      bash -c "
+        cd /var/www &&
+        php artisan schedule:run >> /dev/stdout 2>&1
+      "
+
+databases:
+  - name: culture-database
+    databaseName: culture_db
+    plan: free

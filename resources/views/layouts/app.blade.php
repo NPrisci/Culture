@@ -32,6 +32,14 @@
     <style>
         /* ======= STYLES POUR LE MENU UTILISATEUR ======= */
 
+        .hero-overlay {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.hero-video-container video {
+    filter: brightness(1.25);
+}
+
 .user-profile-menu {
     position: relative;
 }
@@ -170,6 +178,49 @@
         font-size: 1.3rem;
     }
 }
+/* footer */
+/* Footer plus petit et compact */
+.small-footer {
+  padding-top: 20px;
+  padding-bottom: 0;
+  background: #0a0a0a;
+  color: #fff;
+  font-size: 14px;
+}
+
+.small-footer h4, 
+.small-footer h6 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.small-footer .tagline {
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.small-footer a {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.small-footer a:hover {
+  color: #0f0;  /* vert benin */
+}
+
+.social-links a {
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.footer-bottom {
+  background: #000;
+  font-size: 12px;
+  border-top: 1px solid #222;
+}
+
     </style>
 </head>
 
@@ -187,15 +238,15 @@
                 <ul>
                     <li><a href="{{ url('/') }}">Accueil</a></li>
 
-<li><a href="{{ route('a-propos') }}">About</a></li>
+        <li><a href="{{ route('a-propos') }}">About</a></li>
 
-<li><a href="{{ route('patrimoine') }}">Patrimoine</a></li>
+        <li><a href="{{ route('patrimoine') }}">Patrimoine</a></li>
 
-<li><a href="{{ route('galerie') }}">Galerie</a></li>
+        <li><a href="{{ route('galerie') }}">Galerie</a></li>
 
-<li><a href="{{ route('communaute') }}">Communaute</a></li>
+        <li><a href="{{ route('communaute') }}">Communaute</a></li>
 
-<li><a href="{{ route('contact') }}">Contact</a></li>
+         <li><a href="{{ route('contact') }}">Contact</a></li>
 
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -218,17 +269,17 @@
         </form>
 
         <a href="{{ route('profile.edit') }}" class="btn btn-danger">Edit</a>
-    </div>
-@else
-    <a href="{{ route('login') }}" class="btn btn-outline-success me-2">Connexion</a>
-    <a href="{{ route('register') }}" class="btn btn-benin">S’inscrire</a>
-@endauth
+       </div>
+       @else
+       <a href="{{ route('login') }}" class="btn btn-outline-success me-2">Connexion</a>
+       <a href="{{ route('register') }}" class="btn btn-benin">S’inscrire</a>
+       @endauth
 
         </div>
                     </ul>
                 </div>
             </div>
-        </div>
+     </div>
     </header>
 
     {{-- MAIN CONTENT --}}
@@ -237,7 +288,7 @@
     </main>
 
     {{-- FOOTER --}}
-    <footer id="footer" class="footer dark-background">
+    {{-- <footer id="footer" class="footer dark-background">
 
     <div class="container">
       <div class="row gy-5">
@@ -314,7 +365,7 @@
                 <!-- You can delete the links only if you've purchased the pro version. -->
                 <!-- Licensing information: https://bootstrapmade.com/license/ -->
                 <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-                Conçu par <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                Conçu par <a href="https://benin.bj/">Culure Bénin </a>
               </div>
             </div>
           </div>
@@ -322,7 +373,81 @@
       </div>
     </div>
 
-  </footer>
+  </footer> --}}
+  <footer id="footer" class="footer small-footer dark-background">
+
+  <div class="container py-4">
+    <div class="row gy-4">
+
+      <div class="col-lg-3 col-md-6">
+        <h4 class="sitename mb-2">Culture Bénin</h4>
+        <p class="tagline small">
+          Préserver et partager la richesse du patrimoine culturel béninois.
+        </p>
+
+        <div class="social-links mt-3">
+          <a href="#"><i class="bi bi-facebook"></i></a>
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-linkedin"></i></a>
+          <a href="#"><i class="bi bi-twitter-x"></i></a>
+          <a href="#"><i class="bi bi-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-6">
+        <div class="row">
+
+          <div class="col-4">
+            <h6>Culture</h6>
+            <ul class="list-unstyled small">
+              <li><a href="#">À propos</a></li>
+              <li><a href="#">Mission</a></li>
+              <li><a href="#">Événements</a></li>
+              <li><a href="#">Actualités</a></li>
+            </ul>
+          </div>
+
+          <div class="col-4">
+            <h6>Patrimoine</h6>
+            <ul class="list-unstyled small">
+              <li><a href="#">Sites UNESCO</a></li>
+              <li><a href="#">Vodoun</a></li>
+              <li><a href="#">Artisanat</a></li>
+              <li><a href="#">Musique & Danse</a></li>
+            </ul>
+          </div>
+
+          <div class="col-4">
+            <h6>Support</h6>
+            <ul class="list-unstyled small">
+              <li><a href="#">Aide</a></li>
+              <li><a href="#">Contact</a></li>
+              <li><a href="#">Confidentialité</a></li>
+              <li><a href="#">Conditions</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6 text-lg-end">
+        <h6>Restons connectés</h6>
+        <a href="contact.html" class="btn btn-outline btn-sm mt-2">Nous contacter</a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer-bottom py-2">
+    <div class="container text-center small">
+      © Culture Bénin — Tous droits réservés.  
+      <br>
+      Conçu par <a href="https://benin.bj/">Culture Bénin</a>
+    </div>
+  </div>
+
+</footer>
+
 
     <!-- Scroll Top -->
     <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">

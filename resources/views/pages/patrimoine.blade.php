@@ -1,14 +1,25 @@
-@extends('layouts.app')
+@extends('layouts.ap')
 
 @section('title', 'Patrimoine & Sites historiques | Culture Bénin')
 
 @section('content')
+<div class="page-title dark-background" data-aos="fade" style="background-image: url({{ asset('assets/img/construction/drapeau.jpg') }});">
+  <div class="container position-relative">
+     <h2>Sites historiques & Patrimoine</h2>
+        <p>Découvrez les lieux symboliques qui racontent l’histoire du Bénin</p>
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a href="{{ url('/') }}">Accueil</a></li>
+        <li class="current">Patrimoine</li>
+      </ol>
+    </nav>
+  </div>
+</div>
 
 <section id="projects" class="projects section">
 
     <div class="container section-title" data-aos="fade-up">
-        <h2>Sites historiques & Patrimoine</h2>
-        <p>Découvrez les lieux symboliques qui racontent l’histoire du Bénin</p>
+        
     </div>
 
     <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -18,7 +29,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="{{ asset('assets/img/construction/project-3.webp') }}" class="img-fluid">
+                        <img src="{{ asset('assets/img/construction/non-retour1.webp') }}" class="img-fluid">
                         <div class="project-overlay">
                             <a href="{{ url('/project-details') }}" class="btn-project">Voir détails</a>
                         </div>
@@ -33,7 +44,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="{{ asset('assets/img/construction/project-7.webp') }}" class="img-fluid">
+                        <img src="{{ asset('assets/img/construction/abomey1.webp') }}" class="img-fluid">
                         <div class="project-overlay">
                             <a href="{{ url('/project-details') }}" class="btn-project">Voir détails</a>
                         </div>

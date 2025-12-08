@@ -22,14 +22,48 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
-    {
-        $request->authenticate();
+    // public function store(LoginRequest $request): RedirectResponse
+    // {
+    //     $request->authenticate();
 
-        $request->session()->regenerate();
+    //     $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
-    }
+    //     return redirect()->intended(route('dashboard', absolute: false));
+    // }
+
+       public function store(LoginRequest $request): RedirectResponse
+{
+    $request->authenticate();
+
+    $request->session()->regenerate();
+
+    $user = Auth::user();
+
+    
+
+    // Redirection personnalisée selon le rôle
+//     if ($user->id_role === 1) {
+//     return $user->id === 1
+//         ? redirect()->route('dashboard')
+//         : redirect()->route('moderateur');
+// }
+//  elseif ($user->id_role === 2) {
+//         return redirect()->route('user');
+//     } else {
+//         return redirect('/');
+//     }
+// Utiliser un switch pour plus de clarté
+switch ($user->id_role) {
+    case 1: // Admin
+        return redirect()->route('dashboard');
+    case 2: // Modérateur
+        return redirect()->route('moderateur');
+    case 3: // User
+        return redirect()->route('accue');
+    default:
+        return redirect('/');
+}
+}
 
     /**
      * Destroy an authenticated session.
@@ -51,11 +85,12 @@ class AuthenticatedSessionController extends Controller
         return redirect()->route('dashboard');
     }
 
-    if ($user->role->nom_role === 'moderateur') {
+    if ($user->role->nom_role === 'visiteur') {
         return redirect()->route('moderateur');
     }
 
     return redirect()->route('user');
 }
+
 
 }

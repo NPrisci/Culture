@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('contenus.store') }}" method="POST">
+                    <form action="{{ route('contenus.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-md-6">
@@ -45,6 +45,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
@@ -88,7 +89,7 @@
                                         <option value="">Sélectionner un type</option>
                                         @foreach($typesContenu as $type)
                                             <option value="{{ $type->id_type_contenu }}" {{ old('id_type_contenu') == $type->id_type_contenu ? 'selected' : '' }}>
-                                                {{ $type->nom_contentu }}
+                                                {{ $type->nom_contenu }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -98,6 +99,76 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Section Image -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Image</label>
+                                    <input type="file" class="form-control @error('image') is-invalid @enderror" 
+                                           id="image" name="image" accept="image/*">
+                                    @error('image')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <small class="text-muted">Formats acceptés: JPG, PNG, GIF, WEBP. Max: 5MB</small>
+                                    
+                                    <!-- Prévisualisation de l'image -->
+                                    <div class="mt-2" id="imagePreview" style="display: none;">
+                                        <img id="previewImage" src="#" alt="Prévisualisation" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="lien_video" class="form-label">Lien Vidéo (YouTube/Vimeo)</label>
+                                    <input type="url" class="form-control @error('lien_video') is-invalid @enderror" 
+                                           id="lien_video" name="lien_video" value="{{ old('lien_video') }}" 
+                                           placeholder="https://www.youtube.com/watch?v=...">
+                                    @error('lien_video')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <small class="text-muted">Collez le lien YouTube ou Vimeo</small>
+                                    
+                                    <!-- Alternative: Upload direct de vidéo -->
+                                    <div class="mt-2">
+                                        <label for="video_file" class="form-label">OU Télécharger une vidéo</label>
+                                        <input type="file" class="form-control @error('video_file') is-invalid @enderror" 
+                                               id="video_file" name="video_file" accept="video/*">
+                                        @error('video_file')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <small class="text-muted">Formats acceptés: MP4, AVI, MOV, MKV. Max: 50MB</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section Description Image/Video -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="alt_image" class="form-label">Texte alternatif (Image)</label>
+                                    <input type="text" class="form-control @error('alt_image') is-invalid @enderror" 
+                                           id="alt_image" name="alt_image" value="{{ old('alt_image') }}"
+                                           placeholder="Description de l'image pour l'accessibilité">
+                                    @error('alt_image')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="titre_video" class="form-label">Titre de la vidéo</label>
+                                    <input type="text" class="form-control @error('titre_video') is-invalid @enderror" 
+                                           id="titre_video" name="titre_video" value="{{ old('titre_video') }}"
+                                           placeholder="Titre de la vidéo">
+                                    @error('titre_video')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="mb-3">
                             <label for="texte" class="form-label">Contenu *</label>
                             <textarea class="form-control @error('texte') is-invalid @enderror" 
@@ -106,6 +177,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-check-circle"></i> Créer le contenu
@@ -117,4 +189,92 @@
         </div>
     </div>
 </div>
+
+
+<!-- Script pour la prévisualisation de l'image -->
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Prévisualisation de l'image
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImage = document.getElementById('previewImage');
+        
+        imageInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(this.files[0]);
+            } else {
+                imagePreview.style.display = 'none';
+            }
+        });
+
+        // Validation de la taille du fichier image
+        imageInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const maxSize = 5 * 1024 * 1024; // 5MB en bytes
+                if (file.size > maxSize) {
+                    alert('Le fichier est trop volumineux (max 5MB).');
+                    this.value = '';
+                    imagePreview.style.display = 'none';
+                }
+            }
+        });
+
+        // Validation de la taille du fichier vidéo
+        const videoFileInput = document.getElementById('video_file');
+        videoFileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const maxSize = 50 * 1024 * 1024; // 50MB en bytes
+                if (file.size > maxSize) {
+                    alert('Le fichier vidéo est trop volumineux (max 50MB).');
+                    this.value = '';
+                }
+            }
+        });
+
+        // Gestion des liens YouTube/Vimeo
+        const videoLinkInput = document.getElementById('lien_video');
+        videoLinkInput.addEventListener('change', function() {
+            const url = this.value;
+            if (url) {
+                // Extraire l'ID de la vidéo YouTube
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                    let videoId = '';
+                    
+                    if (url.includes('youtube.com/watch?v=')) {
+                        videoId = url.split('v=')[1];
+                        const ampersandPosition = videoId.indexOf('&');
+                        if (ampersandPosition !== -1) {
+                            videoId = videoId.substring(0, ampersandPosition);
+                        }
+                    } else if (url.includes('youtu.be/')) {
+                        videoId = url.split('youtu.be/')[1];
+                    }
+                    
+                    if (videoId) {
+                        // Vous pouvez ici afficher un aperçu si nécessaire
+                        console.log('ID YouTube détecté:', videoId);
+                    }
+                }
+                // Gestion Vimeo
+                else if (url.includes('vimeo.com')) {
+                    const videoId = url.split('vimeo.com/')[1];
+                    if (videoId) {
+                        console.log('ID Vimeo détecté:', videoId);
+                    }
+                }
+            }
+        });
+    });
+</script>
+@endsection
 @endsection

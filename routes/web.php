@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LangueController;
 use App\Http\Controllers\RegionController;
@@ -13,12 +16,14 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ParlerController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\VisiteurController;
+use App\Http\Controllers\AbonnementController;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/check', function () {
+    return view('checkout');
 });
 
-//Route::get('/', [HomeController::class, 'accueil'])->name('accueil');
+Route::get('/', [HomeController::class, 'inde'])->name('acceuil');
 Route::get('/a-propos', [HomeController::class, 'aPropos'])->name('a-propos');
 Route::get('/patrimoine', [HomeController::class, 'patrimoine'])->name('patrimoine');
 Route::get('/patrimoine/{slug}', [HomeController::class, 'patrimoineDetails'])->name('patrimoine.details');
@@ -36,13 +41,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])
         ->name('dashboard');
 
-    Route::get('/moderateur/dashboard', [HomeController::class, 'indexmoderateur'])
+    Route::get('/moderateur/dashboard', [HomeController::class, 'indexModerateur'])
         ->name('moderateur');
 
     Route::get('/user/dashboard', [HomeController::class, 'indexuser'])
         ->name('user');
 
 });
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -119,4 +126,79 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+
+Route::get('/subscribe', [AbonnementController::class, 'showForm'])->name('subscribe.form');
+Route::post('/subscribe', [AbonnementController::class, 'createPayment'])->name('subscribe.pay');
+// webhook (POST) - public endpoint
+Route::post('/webhook/fedapay', [AbonnementController::class, 'webhook'])->name('fedapay.webhook');
+
+Route::get('/payment-success/{id}', [AbonnementController::class, 'success'])
+    ->name('payment.success');
+
+
+
+    // Accueil
+    Route::get('/public', [VisiteurController::class, 'accueil'])->name('accue');
+    
+    // Pages statiques
+    Route::get('/public/a-propos', [VisiteurController::class, 'aPropos'])->name('a-propos');
+    Route::get('/public/contact', [VisiteurController::class, 'contact'])->name('contact');
+    Route::post('/public/contact', [VisiteurController::class, 'soumettreContact'])->name('contact.submit');
+    Route::get('/public/politique-confidentialite', [VisiteurController::class, 'politiqueConfidentialite'])->name('politique');
+    Route::get('/public/conditions-utilisation', [VisiteurController::class, 'conditionsUtilisation'])->name('conditions');
+    
+    // Recherche
+    Route::get('/public/recherche', [VisiteurController::class, 'recherche'])->name('recherche');
+    
+    // Langues
+    Route::get('/public/langues', [VisiteurController::class, 'indexlangue'])->name('langues.index.public');
+    Route::get('/public/langues/{langue}', [VisiteurController::class, 'showlangue'])->name('langues.show.public');
+    
+    // Régions
+    Route::get('/public/regions', [VisiteurController::class, 'indexregion'])->name('regions.index.public');
+    Route::get('/public/regions/{region}', [VisiteurController::class, 'showregion'])->name('regions.show.public');
+    
+    // Contenus
+    Route::get('/public/contenus', [VisiteurController::class, 'indexcontenu'])->name('contenus.index.public');
+    Route::get('/public/contenus/{contenu}', [VisiteurController::class, 'showcontenu'])->name('contenus.show.public');
+    
+    // Commentaires
+    Route::post('/public/commentaires', [VisiteurController::class, 'storeCommentaire'])->name('commentaires.store.public');
+
+
+
+// Paiement
+Route::post('/paiement', [AbonnementController::class, 'createPayment'])
+    ->name('payment.create');
+
+// Callback FedaPay
+Route::get('/paiement/callback', [AbonnementController::class, 'paymentCallback'])
+    ->name('payment.callback');
+
+// Pages de résultat
+Route::get('/paiement/success', function () {
+    return view('payment.success');
+})->name('payment.success');
+
+Route::get('/paiement/failed', function () {
+    return view('payment.failed');
+})->name('payment.failed');
+
+Route::get('/paiement/manuel', [AbonnementController::class, 'manualPayment'])
+    ->name('payment.manual');
+
+    Route::get('/health', function () {
+    return response()->json([
+        'status' => 'healthy',
+        'timestamp' => now(),
+        'services' => [
+            'database' => DB::connection()->getPdo() ? 'connected' : 'disconnected',
+            'cache' => Cache::get('health_check') === 'ok' ? 'working' : 'not working',
+        ]
+    ]);
+});
+
+// Stocker un test dans le cache
+Cache::put('health_check', 'ok', 10);
 require __DIR__.'/auth.php';

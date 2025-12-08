@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  # Serveur Web Nginx
+  webserver:
+    image: nginx:alpine
+    container_name: culture-benin-webserver
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
+    networks:
+      - culture-benin-network
+
+  # Application Laravel
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: culture-benin-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+    environment:
+      - DB_HOST=database
+      - DB_PORT=3306
+      - DB_DATABASE=culture_benin
+      - DB_USERNAME=benin_user
+      - DB_PASSWORD=benin_password
+    depends_on:
+      - database
+    networks:
+      - culture-benin-network
+
+  # Base de données MySQL
+  database:
+    image: mysql:8.0
+    container_name: culture-benin-database
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: culture_benin
+      MYSQL_USER: benin_user
+      MYSQL_PASSWORD: benin_password
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - "3306:3306"
+    networks:
+      - culture-benin-network
+
+  # PHPMyAdmin (optionnel)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: culture-benin-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "8080:80"
+    depends_on:
+      - database
+    networks:
+      - culture-benin-network
+
+volumes:
+  dbdata:
+
+networks:
+  culture-benin-network:
+    driver: bridge
