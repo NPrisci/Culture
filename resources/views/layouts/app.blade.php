@@ -227,7 +227,7 @@
 <body class="index-page">
 
     {{-- HEADER --}}
-    <header id="header" class="header d-flex align-items-center fixed-top">
+   <header id="header" class="header d-flex align-items-center fixed-top">
         <div class="container-fluid container-xl d-flex align-items-center">
 
             <a href="{{ url('/') }}" class="logo d-flex align-items-center me-auto">
@@ -281,6 +281,7 @@
             </div>
      </div>
     </header>
+
 
     {{-- MAIN CONTENT --}}
     <main class="main">
