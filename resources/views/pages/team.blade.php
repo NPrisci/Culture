@@ -30,7 +30,7 @@
 
             <div class="col-lg-4 col-md-6">
                 <div class="team-member">
-                    <img src="{{ asset('assets/img/construction/team-1.webp') }}" class="img-fluid">
+                    <img src="{{ asset('assets/img/construction/team2.webp') }}" class="img-fluid">
                     <div class="member-info mt-3">
                         <h4>Maître Tola</h4>
                         <span>Artisan sculpteur</span>
@@ -41,7 +41,7 @@
 
             <div class="col-lg-4 col-md-6">
                 <div class="team-member">
-                    <img src="{{ asset('assets/img/construction/team-3.webp') }}" class="img-fluid">
+                    <img src="{{ asset('assets/img/construction/team3.webp') }}" class="img-fluid">
                     <div class="member-info mt-3">
                         <h4>Yayi Houénou</h4>
                         <span>Historienne culturelle</span>
@@ -52,7 +52,7 @@
 
             <div class="col-lg-4 col-md-6">
                 <div class="team-member">
-                    <img src="{{ asset('assets/img/construction/team-5.webp') }}" class="img-fluid">
+                    <img src="{{ asset('assets/img/construction/team5.jpg') }}" class="img-fluid">
                     <div class="member-info mt-3">
                         <h4>Baba Sossa</h4>
                         <span>Prêtre Vodoun</span>
