@@ -129,7 +129,7 @@ class RegisteredUserController extends Controller
             'sexe' => $request->sexe,
             'date_naissance' => $request->date_naissance,
             'id_langue' => $request->id_langue,
-            'id_role' => 2, // Rôle "Utilisateur" par défaut
+            'id_role' => 1, // Rôle "Utilisateur" par défaut
             'statut' => 'actif',
             'date_inscription' => now(),
         ]);
