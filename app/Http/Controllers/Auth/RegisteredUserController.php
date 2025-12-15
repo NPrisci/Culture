@@ -140,7 +140,7 @@ class RegisteredUserController extends Controller
         // Connecter automatiquement l'utilisateur
         Auth::login($user);
 
-        return redirect()->route('dashboard')
+        return redirect()->route('accue')
             ->with('success', 'Votre compte a été créé avec succès ! Bienvenue ' . $user->prenom . ' !');
     }
 }
