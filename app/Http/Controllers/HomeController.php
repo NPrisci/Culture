@@ -322,52 +322,7 @@ class HomeController extends Controller
     /**
      * Récupérer les activités récentes
      */
-    private function getRecentActivities()
-    {
-        $activities = collect();
-        
-        // Derniers utilisateurs inscrits
-        $recentUsers = DB::table('users')
-            ->select(
-                DB::raw("CONCAT(prenom, ' ', nom) as nom_complet"),
-                'email',
-                'date_inscription as created_at',
-                DB::raw("'Nouvel utilisateur' as type")
-            )
-            ->orderBy('date_inscription', 'desc')
-            ->take(5)
-            ->get();
-        $activities = $activities->merge($recentUsers);
-        
-        // Derniers contenus créés
-        $recentContenus = DB::table('contenus')
-            ->select(
-                'titre',
-                'date_creation as created_at',
-                'statut',
-                DB::raw("'Nouveau contenu' as type")
-            )
-            ->orderBy('date_creation', 'desc')
-            ->take(5)
-            ->get();
-        $activities = $activities->merge($recentContenus);
-        
-        // Derniers commentaires
-        $recentCommentaires = DB::table('commentaires')
-            ->select(
-                DB::raw("SUBSTRING(texte, 1, 50) as description"),
-                'date as created_at',
-                DB::raw("'Nouveau commentaire' as type")
-            )
-            ->orderBy('date', 'desc')
-            ->take(5)
-            ->get();
-        $activities = $activities->merge($recentCommentaires);
-        
-        // Trier par date décroissante
-        return $activities->sortByDesc('created_at')->take(10);
-    }
-    
+   
     /**
      * Données pour les graphiques
      */
