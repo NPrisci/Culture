@@ -120,7 +120,7 @@
                                     <small class="text-muted">
                                         <i class="bi bi-geo-alt"></i> {{ $contenu->region->nom_region }}
                                     </small>
-                                    <a href="{{ route('contenus.show.public', $contenu) }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ route('contenushow.public', $contenu) }}" class="btn btn-primary btn-sm">
                                         Lire
                                     </a>
                                 </div>

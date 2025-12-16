@@ -170,7 +170,7 @@
                 @if($contenusPopulaires->count() > 0)
                     <div class="list-group">
                         @foreach($contenusPopulaires as $contenu)
-                        <a href="{{ route('contenus.show.public', $contenu) }}" 
+                        <a href="{{ route('contenushow.public', $contenu) }}" 
                            class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between">
                                 <h6 class="mb-1">{{ Str::limit($contenu->titre, 30) }}</h6>
@@ -249,7 +249,7 @@
                                     <small class="text-muted">
                                         <i class="bi bi-translate"></i> {{ $contenu->langue->nom_langue }}
                                     </small>
-                                    <a href="{{ route('contenus.show.public', $contenu) }}" class="btn btn-sm btn-primary">
+                                    <a href="{{ route('contenushow.public', $contenu) }}" class="btn btn-sm btn-primary">
                                         Lire
                                     </a>
                                 </div>

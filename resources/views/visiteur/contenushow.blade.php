@@ -271,7 +271,7 @@
                 @if($contenusSimilaires->count() > 0)
                     <div class="list-group">
                         @foreach($contenusSimilaires as $contenuSimilaire)
-                        <a href="{{ route('contenus.show.public', $contenuSimilaire) }}" 
+                        <a href="{{ route('contenushow.public', $contenuSimilaire) }}" 
                            class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between">
                                 <h6 class="mb-1">{{ Str::limit($contenuSimilaire->titre, 40) }}</h6>
@@ -357,7 +357,7 @@
     <div class="col-12">
         <div class="d-flex justify-content-between">
             @if($previousContenu)
-                <a href="{{ route('contenus.show.public', $previousContenu) }}" class="btn btn-outline-primary">
+                <a href="{{ route('contenushow.public', $previousContenu) }}" class="btn btn-outline-primary">
                     <i class="bi bi-chevron-left"></i> Contenu précédent
                 </a>
             @else
@@ -369,7 +369,7 @@
             </a>
             
             @if($nextContenu)
-                <a href="{{ route('contenus.show.public', $nextContenu) }}" class="btn btn-outline-primary">
+                <a href="{{ route('contenushow.public', $nextContenu) }}" class="btn btn-outline-primary">
                     Contenu suivant <i class="bi bi-chevron-right"></i>
                 </a>
             @else

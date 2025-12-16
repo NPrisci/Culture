@@ -17,7 +17,7 @@
                         Vous pouvez maintenant accéder au contenu.
                     </p>
                     <div class="d-grid gap-2">
-                        <a href="{{ route('contenus.show.public', $contenu) }}" class="btn btn-primary btn-lg">
+                        <a href="{{ route('contenushow.public', $contenu) }}" class="btn btn-primary btn-lg">
                             <i class="bi bi-book"></i> Accéder au contenu
                         </a>
                         <a href="{{ route('contenus.index.public') }}" class="btn btn-outline-secondary">

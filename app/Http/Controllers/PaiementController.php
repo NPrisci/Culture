@@ -40,7 +40,7 @@ class PaiementController extends Controller
             
         if ($hasPaid) {
             Log::info('Utilisateur a déjà payé pour ce contenu');
-            return redirect()->route('contenus.show.public', $contenu)
+            return redirect()->route('contenushow.public', $contenu)
                 ->with('info', 'Vous avez déjà accès à ce contenu.');
         }
         
@@ -104,7 +104,7 @@ class PaiementController extends Controller
             Log::info('Paiement existant trouvé: ID=' . $existingPayment->id . ', Statut=' . $existingPayment->statut);
             if ($existingPayment->statut === 'completed') {
                 Log::info('Paiement déjà complété, redirection vers le contenu');
-                return redirect()->route('contenus.show.public', $contenu)
+                return redirect()->route('contenushow.public', $contenu)
                     ->with('success', 'Vous avez déjà accès à ce contenu.');
             }
             
@@ -314,7 +314,7 @@ class PaiementController extends Controller
                 ]);
                 
                 Log::info('===== FIN callback - Succès =====');
-                return redirect()->route('contenus.show.public', $paiement->contenu_id)
+                return redirect()->route('contenushow.public', $paiement->contenu_id)
                     ->with('success', 'Paiement effectué avec succès ! Vous pouvez maintenant accéder au contenu.');
                     
             } else {
