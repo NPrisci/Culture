@@ -92,7 +92,7 @@
 </div>
 
 <!-- Contenus récents -->
-<div class="row">
+{{-- <div class="row">
     <div class="col-12">
         <h2 class="mb-4">Contenus récents</h2>
         <div class="row">
@@ -162,5 +162,31 @@
             @endforeach
         </div>
     </div>
+</div> --}}
+
+<div class="col-md-4">
+    @if($contenu->image)
+        <img src="{{ asset('storage/'.$contenu->image) }}" 
+             class="img-fluid rounded-start h-100" 
+             alt="{{ $contenu->alt_image ?? $contenu->titre }}"
+             style="object-fit: cover;">
+    @elseif($contenu->video_file)
+        <video class="img-fluid rounded-start h-100" controls style="object-fit: cover;">
+            <source src="{{ asset('storage/'.$contenu->video_file) }}" type="video/mp4">
+            Votre navigateur ne supporte pas la vidéo.
+        </video>
+    @elseif($contenu->audio_file)
+        <div class="d-flex align-items-center justify-content-center h-100">
+            <audio controls>
+                <source src="{{ asset('storage/'.$contenu->audio_file) }}" type="audio/mpeg">
+                Votre navigateur ne supporte pas l'audio.
+            </audio>
+        </div>
+    @else
+        <div class="bg-secondary h-100 d-flex align-items-center justify-content-center">
+            <i class="bi bi-image text-white display-4"></i>
+        </div>
+    @endif
 </div>
+
 @endsection
