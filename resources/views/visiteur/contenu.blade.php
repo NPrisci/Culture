@@ -137,7 +137,7 @@
         @endphp
         
         @if($hasPaid)
-            <a href="{{ route('contenus.show.public', $contenu) }}" class="btn btn-primary btn-sm">
+            <a href="{{ route('contenushow.public', $contenu) }}" class="btn btn-primary btn-sm">
                 <i class="bi bi-book"></i> Lire plus
             </a>
         @else
@@ -226,7 +226,7 @@
         @endphp
         
         @if($hasPaid)
-            <a href="{{ route('contenus.show.public', $contenu) }}" class="btn btn-primary btn-sm">
+            <a href="{{ route('contenushow.public', $contenu) }}" class="btn btn-primary btn-sm">
                 <i class="bi bi-book"></i> Lire plus
             </a>
         @else
@@ -276,7 +276,7 @@
         <div id="listViewContent" style="display: none;">
             <div class="list-group">
                 @forelse($contenus as $contenu)
-                <a href="{{ route('contenus.show.public', $contenu) }}" class="list-group-item list-group-item-action">
+                <a href="{{ route('contenushow.public', $contenu) }}" class="list-group-item list-group-item-action">
                     <div class="row align-items-center">
                         <div class="col-md-3">
                             @if($contenu->medias->first())
