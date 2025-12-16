@@ -164,7 +164,15 @@
     </div>
 </div> --}}
 
-<div class="col-md-4">
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Contenus récents</h2>
+        <div class="row">
+            @foreach($contenusRecents as $contenu)
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="row g-0">
+                        <div class="col-md-4">
     @if($contenu->image)
         <img src="{{ asset('storage/'.$contenu->image) }}" 
              class="img-fluid rounded-start h-100" 
@@ -188,5 +196,58 @@
         </div>
     @endif
 </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ Str::limit($contenu->titre, 50) }}</h5>
+                                <p class="card-text">{{ Str::limit(strip_tags($contenu->texte), 100) }}</p>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">
+                                        <i class="bi bi-geo-alt"></i> {{ $contenu->region->nom_region }}
+                                    </small>
+                                      @if(auth()->check())
+        @php
+            // Vérifier si la variable $contenu existe
+            if (isset($contenu) && $contenu) {
+                $hasPaid = App\Models\Paiement::where('contenu_id', $contenu->id)
+                    ->where('user_id', auth()->id())
+                    ->where('statut', 'completed')
+                    ->exists();
+            } else {
+                $hasPaid = false;
+            }
+        @endphp
+        
+        @if($hasPaid)
+            <a href="{{ route('contenushow.public', $contenu) }}" class="btn btn-primary btn-sm">
+                <i class="bi bi-book"></i> Lire plus
+            </a>
+        @else
+            @if(isset($contenu) && $contenu)
+                <a href="{{ route('contenus.paiement.form', $contenu) }}" class="btn btn-success btn-sm">
+                    <i class="bi bi-credit-card"></i> Lire plus
+                </a>
+            @else
+                <button type="button" class="btn btn-secondary btn-sm" disabled>
+                    <i class="bi bi-credit-card"></i> Indisponible
+                </button>
+            @endif
+        @endif
+    @else
+        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <i class="bi bi-lock"></i> Lire plus
+        </button>
+    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+
+
 
 @endsection
