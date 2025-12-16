@@ -253,7 +253,7 @@
                 @endif
                 <h5>{{ $contenu->auteur->prenom }} {{ $contenu->auteur->nom }}</h5>
                 <p class="text-muted">
-                    <i class="bi bi-translate"></i> {{ $contenu->auteur->langue->nom_langue }}
+                    <i class="bi bi-translate"></i> {{ $contenu->auteur->langue->nom_langue ?? 'Non défini'}}
                 </p>
                 <div class="d-grid">
                     <a href="#" class="btn btn-outline-success btn-sm">Voir le profil</a>
