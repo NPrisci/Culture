@@ -54,7 +54,7 @@
                                         <span class="badge bg-secondary">{{ $utilisateur->role->nom_role }}</span>
                                     </td>
                                     <td>
-                                        <span class="badge bg-info">{{ $utilisateur->langue->nom_langue }}</span>
+                                        <span class="badge bg-info">{{ $utilisateur->langue->nom_langue ?? 'Non défini'}}</span>
                                     </td>
                                     <td>
                                         <span class="badge bg-{{ $utilisateur->statut == 'actif' ? 'success' : 'danger' }}">
