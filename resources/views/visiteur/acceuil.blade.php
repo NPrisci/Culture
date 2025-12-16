@@ -120,9 +120,39 @@
                                     <small class="text-muted">
                                         <i class="bi bi-geo-alt"></i> {{ $contenu->region->nom_region }}
                                     </small>
-                                    <a href="{{ route('contenushow.public', $contenu) }}" class="btn btn-primary btn-sm">
-                                        Lire
-                                    </a>
+                                      @if(auth()->check())
+        @php
+            // Vérifier si la variable $contenu existe
+            if (isset($contenu) && $contenu) {
+                $hasPaid = App\Models\Paiement::where('contenu_id', $contenu->id)
+                    ->where('user_id', auth()->id())
+                    ->where('statut', 'completed')
+                    ->exists();
+            } else {
+                $hasPaid = false;
+            }
+        @endphp
+        
+        @if($hasPaid)
+            <a href="{{ route('contenushow.public', $contenu) }}" class="btn btn-primary btn-sm">
+                <i class="bi bi-book"></i> Lire plus
+            </a>
+        @else
+            @if(isset($contenu) && $contenu)
+                <a href="{{ route('contenus.paiement.form', $contenu) }}" class="btn btn-success btn-sm">
+                    <i class="bi bi-credit-card"></i> Lire plus
+                </a>
+            @else
+                <button type="button" class="btn btn-secondary btn-sm" disabled>
+                    <i class="bi bi-credit-card"></i> Indisponible
+                </button>
+            @endif
+        @endif
+    @else
+        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <i class="bi bi-lock"></i> Lire plus
+        </button>
+    @endif
                                 </div>
                             </div>
                         </div>

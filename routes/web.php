@@ -215,7 +215,7 @@ Route::get('/paiement/callback', [PaiementController::class, 'callback'])
 // Route pour voir un contenu (avec vérification de paiement)
 Route::get('/conte/{contenu}', [VisiteurController::class, 'showcontenu'])
     ->name('contenushow.public')
-    ->middleware(['auth']);
+    ->middleware(['auth', 'payment.verified']);
 
 
 require __DIR__.'/auth.php';
