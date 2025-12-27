@@ -124,7 +124,7 @@
                 @if($langue->contenus->count() > 0)
                     <div class="list-group">
                         @foreach($langue->contenus->take(5) as $contenu)
-                        <a href="{{ route('contenus.show.public', $contenu) }}" 
+                        <a href="{{ route('contenushow.public', $contenu) }}" 
                            class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between">
                                 <h6 class="mb-1">{{ Str::limit($contenu->titre, 40) }}</h6>

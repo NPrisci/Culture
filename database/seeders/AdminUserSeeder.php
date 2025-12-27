@@ -50,7 +50,7 @@ class AdminUserSeeder extends Seeder
             [
                 'nom' => 'COMLAN',
                 'prenom' =>'Maurice',
-                'email' => 'mauricecomlan@gmail.com',
+                'email' => 'mauricecomlan@uac.com',
                 'password' => Hash::make('Eneam123'),
                 'email_verified_at' => now(),
                 'date_inscription' => now(), 

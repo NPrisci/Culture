@@ -389,7 +389,7 @@ class VisiteurController extends Controller
             'id_contentu' => $request->id_contentu,
         ]);
         
-        return redirect()->route('contenus.show.public', $request->id_contentu)
+        return redirect()->route('contenushow.public', $request->id_contentu)
             ->with('success', 'Votre commentaire a été publié !');
     }
 }
