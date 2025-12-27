@@ -16,7 +16,10 @@ class TypeMediaSeeder extends Seeder
         ];
 
         foreach ($types as $type) {
-            TypeMedia::create($type);
+            TypeMedia::updateOrCreate([
+                // Conditions de recherche : nom unique
+                'nom_media' => $type['nom_media'],
+            ], $type);
         }
     }
 }

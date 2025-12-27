@@ -15,8 +15,9 @@ class CommentaireSeeder extends Seeder
                 'texte' => 'Très bon article sur la culture Fon.',
                 'note' => 5,
                 'date' => Carbon::now(),
-                'id_utilisateur' => 1, 
-                'id_contenu' => 1,     
+                'id_utilisateur' => 1,
+                'id_contenu' => 1,
+                'statut' => 'approuvé',
             ],
             [
                 'texte' => 'Intéressant mais manque des détails sur le festival de Ouidah.',
@@ -24,11 +25,19 @@ class CommentaireSeeder extends Seeder
                 'date' => Carbon::now(),
                 'id_utilisateur' => 2,
                 'id_contenu' => 2,
+                'statut' => 'approuvé',
             ],
         ];
 
         foreach ($commentaires as $commentaire) {
-            Commentaire::create($commentaire);
+            Commentaire::updateOrCreate(
+                [
+                    // Conditions : un utilisateur ne peut commenter qu'une fois par contenu
+                    'id_utilisateur' => $commentaire['id_utilisateur'],
+                    'id_contenu' => $commentaire['id_contenu'],
+                ],
+                $commentaire
+            );
         }
     }
 }

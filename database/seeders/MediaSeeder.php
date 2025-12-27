@@ -43,7 +43,14 @@ class MediaSeeder extends Seeder
         ];
 
         foreach ($medias as $media) {
-            Media::create($media);
+            Media::updateOrCreate(
+                [
+                    // Conditions de recherche : chemin unique
+                    'chemin' => $media['chemin'],
+                ],
+                // Données à créer/mettre à jour
+                $media
+            );
         }
     }
 }

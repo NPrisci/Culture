@@ -79,7 +79,16 @@ class ContenuSeeder extends Seeder
         ];
 
         foreach ($contenus as $contenu) {
-            Contenu::create($contenu);
+            Contenu::updateOrCreate(
+                [
+                    // Conditions de recherche (champs uniques)
+                    'titre' => $contenu['titre'],
+                    'id_langue' => $contenu['id_langue'],
+                    'id_region' => $contenu['id_region'],
+                ],
+                // Données à créer/mettre à jour
+                $contenu
+            );
         }
     }
 }

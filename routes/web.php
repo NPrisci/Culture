@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LangueController;
 use App\Http\Controllers\RegionController;
@@ -20,10 +18,18 @@ use App\Http\Controllers\VisiteurController;
 use App\Http\Controllers\AbonnementController;
 use App\Http\Controllers\PaiementController;
 
+/*
+|--------------------------------------------------------------------------
+| Routes Publiques (Accessibles à tous)
+|--------------------------------------------------------------------------
+*/
+
+// Page de test/check
 Route::get('/check', function () {
     return view('checkout');
 });
 
+// Accueil et pages statiques publiques
 Route::get('/', [HomeController::class, 'inde'])->name('acceuil');
 Route::get('/a-propos', [HomeController::class, 'aPropos'])->name('a-propos');
 Route::get('/patrimoine', [HomeController::class, 'patrimoine'])->name('patrimoine');
@@ -31,82 +37,149 @@ Route::get('/patrimoine/{slug}', [HomeController::class, 'patrimoineDetails'])->
 Route::get('/galerie', [HomeController::class, 'galerie'])->name('galerie');
 Route::get('/communaute', [HomeController::class, 'communaute'])->name('communaute');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
-//Route::get('/dashboard', 
-// function () {
-//     return view('dashboard');
-// }
-// [HomeController::class, 'index']
-//)->middleware(['auth', 'verified'])->name('dashboard');
-Route::middleware(['auth'])->group(function () {
 
-    Route::get('/dashboard', [HomeController::class, 'index'])
-        ->name('dashboard');
+// Routes VisiteurController (public)
+Route::prefix('public')->group(function () {
+    Route::get('/', [VisiteurController::class, 'accueil'])->name('accue');
+    Route::get('/a-propos', [VisiteurController::class, 'aPropos'])->name('apropos');
+    Route::get('/contact', [VisiteurController::class, 'contact'])->name('contactpublic');
+    Route::post('/contact', [VisiteurController::class, 'soumettreContact'])->name('contact.submit');
+    Route::get('/politique-confidentialite', [VisiteurController::class, 'politiqueConfidentialite'])->name('politique');
+    Route::get('/conditions-utilisation', [VisiteurController::class, 'conditionsUtilisation'])->name('conditions');
 
-    Route::get('/moderateur/dashboard', [HomeController::class, 'indexModerateur'])
-        ->name('moderateur');
+    Route::get('/recherche', [VisiteurController::class, 'recherche'])->name('recherche');
 
-    Route::get('/user/dashboard', [HomeController::class, 'indexuser'])
-        ->name('user');
+    // Langues publiques
+    Route::get('/langues', [VisiteurController::class, 'indexlangue'])->name('langues.index.public');
+    Route::get('/langues/{langue}', [VisiteurController::class, 'showlangue'])->name('langues.show.public');
 
+    // Régions publiques
+    Route::get('/regions', [VisiteurController::class, 'indexregion'])->name('regions.index.public');
+    Route::get('/regions/{region}', [VisiteurController::class, 'showregion'])->name('regions.show.public');
+
+    // Contenus publics
+    Route::get('/contenus', [VisiteurController::class, 'indexcontenu'])->name('contenus.index.public');
+
+    // Commentaires (store seulement)
+    Route::post('/commentaires', [VisiteurController::class, 'storeCommentaire'])->name('commentaires.store.public');
 });
 
+/*
+|--------------------------------------------------------------------------
+| Routes d'Abonnement et Paiement
+|--------------------------------------------------------------------------
+*/
+
+// Abonnement
+Route::get('/subscribe', [AbonnementController::class, 'showForm'])->name('subscribe.form');
+Route::post('/subscribe', [AbonnementController::class, 'createPayment'])->name('subscribe.pay');
+Route::get('/payment-success/{id}', [AbonnementController::class, 'success'])->name('payment.success');
+
+// Paiement général
+Route::post('/paiement', [AbonnementController::class, 'createPayment'])->name('payment.create');
+Route::get('/payment/callback', [AbonnementController::class, 'paymentCallback'])->name('payment.callback');
+Route::get('/payment/manuel', [AbonnementController::class, 'manualPayment'])->name('payment.manual');
+
+// Webhook (doit être public)
+Route::post('/webhook/fedapay', [AbonnementController::class, 'webhook'])->name('fedapay.webhook');
+
+// Pages de résultat de paiement
+Route::get('/payment/failed', function () {
+    return view('payment.failed');
+})->name('payment.failed');
+
+/*
+|--------------------------------------------------------------------------
+| Routes Authentifiées (Nécessite une connexion)
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware('auth')->group(function () {
+
+    // Dashboard selon le rôle
+    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+    Route::get('/moderateur/dashboard', [HomeController::class, 'indexModerateur'])->name('moderateur');
+    Route::get('/user/dashboard', [HomeController::class, 'indexuser'])->name('user');
+
+    // Profil utilisateur
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
-     
-    // Routes avec paramètres explicites
-    Route::resource('langues', LangueController::class)->parameters([
-        'langues' => 'id'
-    ]);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Routes CRUD Administratives
+    |--------------------------------------------------------------------------
+    */
+
+    // Langues
+    Route::resource('langues', LangueController::class)->parameters(['langues' => 'id']);
     Route::get('langues/datatable', [LangueController::class, 'datatable'])->name('langues.datatable');
-    
-    Route::resource('regions', RegionController::class)->parameters([
-        'regions' => 'id'
-    ]);
-    
-    Route::resource('contenus', ContenuController::class)->parameters([
-        'contenus' => 'id'
-    ]);
-    
-    Route::resource('commentaires', CommentaireController::class)->parameters([
-        'commentaires' => 'id'
-    ]);
-    
-    Route::resource('medias', MediaController::class)->parameters([
-        'medias' => 'id'
-    ]);
-    
-    Route::resource('typecontenus', TypeContenuController::class)->parameters([
-        'typecontenus' => 'id'
-    ]);
-    
-    Route::resource('typemedias', TypeMediaController::class)->parameters([
-        'typemedias' => 'id'
-    ]);
-    
-    Route::resource('roles', RoleController::class)->parameters([
-        'roles' => 'id'
-    ]);
-    
-    Route::resource('utilisateurs', UserController::class)->parameters([
-        'utilisateurs' => 'id'
-    ]);
-    
-    Route::resource('parler', ParlerController::class)->parameters([
-        'parler' => 'id'
-    ]);
+
+    // Régions
+    Route::resource('regions', RegionController::class)->parameters(['regions' => 'id']);
+
+    // Contenus
+    Route::resource('contenus', ContenuController::class)->parameters(['contenus' => 'id']);
+
+    // Commentaires
+    Route::resource('commentaires', CommentaireController::class)->parameters(['commentaires' => 'id']);
+
+    // Médias
+    Route::resource('medias', MediaController::class)->parameters(['medias' => 'id']);
+
+    // Types de contenu
+    Route::resource('typecontenus', TypeContenuController::class)->parameters(['typecontenus' => 'id']);
+
+    // Types de média
+    Route::resource('typemedias', TypeMediaController::class)->parameters(['typemedias' => 'id']);
+
+    // Rôles
+    Route::resource('roles', RoleController::class)->parameters(['roles' => 'id']);
+
+    // Utilisateurs
+    Route::resource('utilisateurs', UserController::class)->parameters(['utilisateurs' => 'id']);
+
+    // Parler
+    Route::resource('parler', ParlerController::class)->parameters(['parler' => 'id']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Routes de Paiement pour Contenus
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/contenus/{contenu}/paiement', [PaiementController::class, 'showPaiementForm'])
+        ->name('contenus.paiement.form');
+
+    Route::post('/contenus/{contenu}/paiement', [PaiementController::class, 'processPaiement'])
+        ->name('contenus.paiement.process');
+
 });
 
-// Route de test d'authentification
+/*
+|--------------------------------------------------------------------------
+| Routes avec Middleware Spéciaux
+|--------------------------------------------------------------------------
+*/
+
+// Route pour voir un contenu (nécessite auth + vérification paiement)
+Route::get('/conte/{contenu}', [VisiteurController::class, 'showcontenu'])
+    ->name('contenushow.public')
+    ->middleware(['auth', 'payment.verified']);
+
+/*
+|--------------------------------------------------------------------------
+| Routes Techniques et Tests
+|--------------------------------------------------------------------------
+*/
+
+// Test d'authentification
 Route::get('/test-login', function() {
     $credentials = [
         'email' => 'admin@beninculture.com',
         'password' => 'password123'
     ];
-    
+
     if (Auth::attempt($credentials)) {
         return response()->json([
             'success' => true,
@@ -121,101 +194,8 @@ Route::get('/test-login', function() {
     }
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-
-
-Route::get('/subscribe', [AbonnementController::class, 'showForm'])->name('subscribe.form');
-Route::post('/subscribe', [AbonnementController::class, 'createPayment'])->name('subscribe.pay');
-// webhook (POST) - public endpoint
-Route::post('/webhook/fedapay', [AbonnementController::class, 'webhook'])->name('fedapay.webhook');
-
-Route::get('/payment-success/{id}', [AbonnementController::class, 'success'])
-    ->name('payment.success');
-
-
-
-    // Accueil
-    Route::get('/public', [VisiteurController::class, 'accueil'])->name('accue');
-    
-    // Pages statiques
-    Route::get('/public/a-propos', [VisiteurController::class, 'aPropos'])->name('apropos');
-    Route::get('/public/contact', [VisiteurController::class, 'contact'])->name('contactpublic');
-    Route::post('/public/contact', [VisiteurController::class, 'soumettreContact'])->name('contact.submit');
-    Route::get('/public/politique-confidentialite', [VisiteurController::class, 'politiqueConfidentialite'])->name('politique');
-    Route::get('/public/conditions-utilisation', [VisiteurController::class, 'conditionsUtilisation'])->name('conditions');
-    
-    // Recherche
-    Route::get('/public/recherche', [VisiteurController::class, 'recherche'])->name('recherche');
-    
-    // Langues
-    Route::get('/public/langues', [VisiteurController::class, 'indexlangue'])->name('langues.index.public');
-    Route::get('/public/langues/{langue}', [VisiteurController::class, 'showlangue'])->name('langues.show.public');
-    
-    // Régions
-    Route::get('/public/regions', [VisiteurController::class, 'indexregion'])->name('regions.index.public');
-    Route::get('/public/regions/{region}', [VisiteurController::class, 'showregion'])->name('regions.show.public');
-    
-    // Contenus
-    Route::get('/public/contenus', [VisiteurController::class, 'indexcontenu'])->name('contenus.index.public');
-    // Route::get('/public/contenus/{contenu}', [VisiteurController::class, 'showcontenu'])->name('contenus.show.public');
-    
-    // Commentaires
-    Route::post('/public/commentaires', [VisiteurController::class, 'storeCommentaire'])->name('commentaires.store.public');
-
-
-
-// Paiement
-Route::post('/paiement', [AbonnementController::class, 'createPayment'])
-    ->name('payment.create');
-
-// Callback FedaPay
-Route::get('/payment/callback', [AbonnementController::class, 'paymentCallback'])
-    ->name('payment.callback');
-
-// Pages de résultat
-
-Route::get('/payment/failed', function () {
-    return view('payment.failed');
-})->name('payment.failed');
-
-Route::get('/payment/manuel', [AbonnementController::class, 'manualPayment'])
-    ->name('payment.manual');
-
-    Route::get('/health', function () {
-    return response()->json([
-        'status' => 'healthy',
-        'timestamp' => now(),
-        'services' => [
-            'database' => DB::connection()->getPdo() ? 'connected' : 'disconnected',
-            'cache' => Cache::get('health_check') === 'ok' ? 'working' : 'not working',
-        ]
-    ]);
-});
-
-
-
-// Routes de paiement
-Route::middleware(['auth'])->group(function () {
-    Route::get('/contenus/{contenu}/paiement', [PaiementController::class, 'showPaiementForm'])
-        ->name('contenus.paiement.form');
-    
-    Route::post('/contenus/{contenu}/paiement', [PaiementController::class, 'processPaiement'])
-        ->name('contenus.paiement.process');
-});
-
-// Route de callback (accessible sans auth)
+// Callback de paiement (public)
 Route::get('/paiement/callback', [PaiementController::class, 'callback'])
     ->name('paiement.callback');
-
-// Route pour voir un contenu (avec vérification de paiement)
-Route::get('/conte/{contenu}', [VisiteurController::class, 'showcontenu'])
-    ->name('contenushow.public')
-    ->middleware(['auth', 'payment.verified']);
-
 
 require __DIR__.'/auth.php';

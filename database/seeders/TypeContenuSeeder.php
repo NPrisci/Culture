@@ -16,7 +16,10 @@ class TypeContenuSeeder extends Seeder
         ];
 
         foreach ($types as $type) {
-            TypeContenu::create($type);
+            TypeContenu::updateOrCreate([
+                // Conditions de recherche : nom unique
+                'nom_contenu' => $type['nom_contenu'],
+            ], $type);
         }
     }
 }
